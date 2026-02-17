@@ -3,7 +3,8 @@ import requests
 ORTHANC_URL = "http://localhost:8042"
 AUTH = ("orthanc", "orthanc")
 
-PATIENT_ID = "001"  # just for now — we remove later
+# Change this ID to match the patient you uploaded via 3D Slicer
+PATIENT_ID = "001"  
 
 studies = requests.get(
     f"{ORTHANC_URL}/studies",
@@ -28,3 +29,4 @@ if found_study:
     print(" Found study:", found_study)
 else:
     print(" Patient not found")
+
