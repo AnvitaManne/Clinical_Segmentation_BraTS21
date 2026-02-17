@@ -8,14 +8,14 @@ import SimpleITK as sitk
 from monai.networks.nets import UNet
 from monai.transforms import Compose, EnsureChannelFirst, ScaleIntensity, Resize, ToTensor
 
-# --- CONFIG ---
+# CONFIG
 ORTHANC_URL = "http://localhost:8042"
 AUTH = ("orthanc", "orthanc")
-# Relative path for your GitHub repo
-MODEL_PATH = r"C:\Users\anvit\Downloads\Suvarna_Model_Run\unet_brats_multimodal_epoch_50.pth"
+
+MODEL_PATH = "model/unet_brats_multimodal_epoch_50.pth"
 PATIENT_ID = "001" 
 
-# --- STEP 1: check_orthanc_connec ---
+# STEP 1: check_orthanc_connec 
 def step1_check_orthanc_connec():
     r = requests.get(f"{ORTHANC_URL}/studies", auth=AUTH)
     print("Status:", r.status_code)
@@ -24,7 +24,7 @@ def step1_check_orthanc_connec():
         print("Studies:", r.json())
     return r.status_code
 
-# --- STEP 2: find_patient ---
+# STEP 2,3 : find_patient and get_patient_info 
 def step2_find_patient():
     studies = requests.get(f"{ORTHANC_URL}/studies", auth=AUTH).json()
     patient_studies = []
@@ -44,7 +44,7 @@ def step2_find_patient():
         print(" Patient not found")
         return []
 
-# --- STEP 4: find_modalities ---
+# STEP 4: find_modalities 
 def step4_find_modalities(study_list):
     modalities_found = {"FLAIR": None, "T1": None, "T2": None}
     
@@ -69,7 +69,7 @@ def step4_find_modalities(study_list):
     print(modalities_found)
     return modalities_found
 
-# --- STEP 5: run_model (With Coordinate Correction) ---
+# STEP 5: run_model 
 def step5_run_model(modalities):
     os.makedirs("dicom_temp", exist_ok=True)
     os.makedirs("nifti_temp", exist_ok=True)
@@ -133,8 +133,7 @@ def step5_run_model(modalities):
         output = model(input_tensor)
         pred_logits = torch.argmax(output, dim=1).cpu().numpy()[0]
     
-    # 5. FIX: Copying Affine & Header for Perfect Alignment in 3D Slicer
-    # This prevents the "top-shift" by matching the mask to the MRI's physical location
+    # 5. Copying Affine & Header for Perfect Alignment in 3D Slicer
     prediction_nii = nib.Nifti1Image(
         pred_logits.astype(np.uint8), 
         flair_obj.affine, 
@@ -145,7 +144,7 @@ def step5_run_model(modalities):
     nib.save(prediction_nii, output_filename)
     print(f" Full pipeline complete.\nSaved: {output_filename} with coordinate alignment.")
 
-# --- MAIN CONTROL ---
+# MAIN CONTROL 
 if __name__ == "__main__":
     if step1_check_orthanc_connec() == 200:
         studies = step2_find_patient()
@@ -154,4 +153,5 @@ if __name__ == "__main__":
             if all(mapping.values()):
                 step5_run_model(mapping)
             else:
+
                 print(" Still missing some modalities in the mapping.")
