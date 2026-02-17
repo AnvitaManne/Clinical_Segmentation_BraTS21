@@ -13,6 +13,12 @@ The system simulates a real-world clinical environment by managing the complete 
 
 ---
 
+### Sample Clinical Output
+
+![Predicted Tumor Segmentation (3D Slicer Overlay)](images/slicer_prediction.png)
+
+---
+
 ## Repository Structure
 
 The repository separates experimental development from production-ready implementation.
@@ -62,16 +68,6 @@ Upload converted DICOM series to the local Orthanc instance.
 
 Verification: 
 Load `prediction_mask.nii.gz` in Slicer alongside the source scans to verify anatomical alignment and view predicted tumor.
-
----
-
-### Sample Clinical Output
-
-![Predicted Tumor Segmentation (3D Slicer Overlay)](images/slicer_prediction.png)
-
----
-
-
 
 ### 3. Python Requirements
 
