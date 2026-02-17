@@ -1,5 +1,5 @@
 # ClinSeg-BraTS21 
-# End-to-End Multimodal Brain Tumor Segmentation from Model Training to Clinical Integration
+## End-to-End Multimodal Brain Tumor Segmentation from Model Training to Clinical Integration
 
 This project implements a full-stack medical AI workflow bridging deep learning research and clinical data infrastructure. It features a multimodal U-Net trained on the BraTS 2021 dataset and an automated inference pipeline integrated directly with a PACS server.
 
