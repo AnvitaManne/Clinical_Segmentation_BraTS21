@@ -37,7 +37,6 @@ def step2_find_patient():
             patient_studies.append(study_id)
             
     if patient_studies:
-        # Keeping your print style
         print(" Found study:", patient_studies[0]) 
         return patient_studies
     else:
@@ -118,7 +117,6 @@ def step5_run_model(modalities):
     print(" Model loaded")
 
     # 3. Load Data & Prepare for Model
-    # We load the full flair object here so we can use its affine matrix later
     flair_obj = nib.load(f_nii_path)
     flair_data = flair_obj.get_fdata()
     t1_data = nib.load(t1_nii_path).get_fdata()
@@ -140,7 +138,7 @@ def step5_run_model(modalities):
         flair_obj.header
     )
     
-    output_filename = "newest_prediction_mask.nii.gz"
+    output_filename = "prediction_mask.nii.gz"
     nib.save(prediction_nii, output_filename)
     print(f" Full pipeline complete.\nSaved: {output_filename} with coordinate alignment.")
 
@@ -155,3 +153,4 @@ if __name__ == "__main__":
             else:
 
                 print(" Still missing some modalities in the mapping.")
+
