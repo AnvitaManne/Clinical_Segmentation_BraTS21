@@ -5,6 +5,7 @@ import torch
 import nibabel as nib
 import numpy as np
 import SimpleITK as sitk
+from scipy.ndimage import zoom
 from monai.networks.nets import UNet
 from monai.transforms import Compose, EnsureChannelFirst, ScaleIntensity, Resize, ToTensor
 
@@ -83,13 +84,10 @@ def step5_run_model(modalities):
         return extract_path
 
     def dicom_to_nifti(dicom_root, name):
-        # Find folder containing .dcm files
         d_folder = None
         for root, _, files in os.walk(dicom_root):
             if any(f.lower().endswith(".dcm") for f in files):
                 d_folder = root; break
-        
-        # Transcode DICOM to NIfTI
         reader = sitk.ImageSeriesReader()
         reader.SetFileNames(reader.GetGDCMSeriesFileNames(d_folder))
         sitk.WriteImage(reader.Execute(), f"nifti_temp/{name}.nii.gz")
@@ -129,18 +127,30 @@ def step5_run_model(modalities):
     # 4. Run Prediction
     with torch.no_grad():
         output = model(input_tensor)
-        pred_logits = torch.argmax(output, dim=1).cpu().numpy()[0]
+        pred_low_res = torch.argmax(output, dim=1).cpu().numpy()[0]
     
-    # 5. Copying Affine & Header for Perfect Alignment in 3D Slicer
+    # Upscaling
+    print(f"Resizing mask from {pred_low_res.shape} to clinical resolution {flair_data.shape}...")
+    
+    zoom_factors = (
+        flair_data.shape[0] / pred_low_res.shape[0],
+        flair_data.shape[1] / pred_low_res.shape[1],
+        flair_data.shape[2] / pred_low_res.shape[2]
+    )
+    
+    pred_high_res = zoom(pred_low_res, zoom_factors, order=0)
+
+    # 5. Saving with High-Res Data + Original Metadata
     prediction_nii = nib.Nifti1Image(
-        pred_logits.astype(np.uint8), 
+        pred_high_res.astype(np.uint8), 
         flair_obj.affine, 
         flair_obj.header
     )
     
     output_filename = "prediction_mask.nii.gz"
     nib.save(prediction_nii, output_filename)
-    print(f" Full pipeline complete.\nSaved: {output_filename} with coordinate alignment.")
+    print(f" Full pipeline complete.\nSaved: {output_filename} with coordinate and resolution alignment.")
+
 
 # MAIN CONTROL 
 if __name__ == "__main__":
@@ -153,4 +163,5 @@ if __name__ == "__main__":
             else:
 
                 print(" Still missing some modalities in the mapping.")
+
 
