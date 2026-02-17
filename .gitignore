@@ -1,0 +1,12 @@
+# Ignore the actual data files inside these folders
+data/dicom_temp/*
+data/nifti_temp/*
+
+# But don't ignore the .gitkeep file 
+!data/dicom_temp/.gitkeep
+!data/nifti_temp/.gitkeep
+
+# Ignore large model weights and python cache
+*.pth
+__pycache__/
+.venv/
