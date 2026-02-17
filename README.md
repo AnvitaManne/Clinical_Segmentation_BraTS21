@@ -2,10 +2,7 @@
 ## End-to-End Multimodal Brain Tumor Segmentation from Model Training to Clinical Integration
 
 This project implements a full-stack medical AI workflow bridging deep learning research and clinical data infrastructure. It features a multimodal U-Net trained on the BraTS 2021 dataset and an automated inference pipeline integrated directly with a PACS server.
-
-## Overview
-
-The project simulates a real-world clinical deployment environment. It handles the full lifecycle of a medical imaging task, from local data management in Orthanc to automated processing and 3D validation in 3D Slicer.
+The project simulates a real-world clinical deployment environment by handling the full lifecycle of a medical imaging task, from local data management in Orthanc to automated processing and 3D validation in 3D Slicer.
 
 Key technical components:
 
