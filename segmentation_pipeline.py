@@ -20,7 +20,7 @@ PATIENT_ID = "001"
 def step1_check_orthanc_connec():
     r = requests.get(f"{ORTHANC_URL}/studies", auth=AUTH)
     print("Status:", r.status_code)
-    # Using your original print
+    
     if r.status_code == 200:
         print("Studies:", r.json())
     return r.status_code
@@ -163,5 +163,6 @@ if __name__ == "__main__":
             else:
 
                 print(" Still missing some modalities in the mapping.")
+
 
 
