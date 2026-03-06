@@ -16,11 +16,11 @@ The system simulates a real-world clinical environment by managing the complete 
 F - predicted tumor with 50% opactiy
 B - flair 
 ![Predicted Tumor Segmentation (3D Slicer Overlay)](images/slicer_prediction.png)
-<p align="center">
-  <video src="https://github.com/AnvitaManne/ClinSeg-BraTS21/blob/main/images/Screen%20Recording%202026-02-17%20175744.mp4?raw=true" width="100%" controls>
-  </video>
-</p>
+
+https://github.com/user-attachments/assets/bc745eba-bc4b-47dd-8805-9189affed458
+
 ---
+
 
 ## Repository Structure
 
