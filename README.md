@@ -18,7 +18,8 @@ B - flair
 ![Predicted Tumor Segmentation (3D Slicer Overlay)](images/slicer_prediction.png)
 
 <p align="center">
-  <video src="images/3d_slicer_prediction.mp4" width="100%" controls autoplay loop muted></video>
+  <video src="https://github.com/AnvitaManne/ClinSeg-BraTS21/blob/main/images//3d_slicer_prediction.mp4?raw=true" width="100%" controls>
+  </video>
 </p>
 
 ---
